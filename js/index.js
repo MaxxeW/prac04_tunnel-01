@@ -36,7 +36,7 @@ function init() {
 
   points.push(
     new THREE.Vector3(90.76810240262256,-78.43994701631564,-60.87430461522736),
-    new THREE.Vector3(-33.1123,34.85931810950564,35.06127159348286),//
+    new THREE.Vector3(-33.1123,34.85931810950564,35.06127159348286),
     new THREE.Vector3(79.22098098525535,-8.802698381849979,29.62917940815953),
     new THREE.Vector3(55.05579997071459,-16.593400565731244,-48.79556538193444),
     new THREE.Vector3(37.62036817620748,37.206369510919586,-19.950374022162435),
@@ -114,10 +114,27 @@ function init() {
   yawObject.add(pitchObject);
 
   scene.add(yawObject);
-  // document.addEventListener('mousemove', onMouseMove, false);
-  // window.addEventListener('resize', onWindowResize, false);
 }
 
+function onMouseMove(event) {
+  let movementX = event.pageX - viewHalfX;
+  let movementY = event.pageY - viewHalfY;
+  pitchObject.rotation.y = -movementX * 0.002;
+  pitchObject.rotation.x = -movementY * 0.002;
+
+  pitchObject.rotation.x = Math.max( -Math.PI / 2, Math.min(Math.PI / 2, pitchObject.rotation.x));
+}
+
+function onWindowResize() {
+  camera.left = window.innerWidth / -2;
+  camera.right = window.innerWidth / 2;
+  camera.top = window.innerHeight / 2;
+  camera.bottom = window.innerHeight / -2;
+  camera.updateProjectionMatrix();
+  viewHalfX = window.innerWidth / 2;
+  viewHalfY = window.innerHeight / 2;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
 function animate() {
   let time = performance.now() * 0.001;
